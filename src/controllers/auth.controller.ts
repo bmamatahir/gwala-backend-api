@@ -41,6 +41,18 @@ class AuthController {
       next(error);
     }
   };
+
+  public confirmEmail = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const token: string = req.query.token as string;
+      const callbackURL: string = req.query.callbackURL as string;
+
+      await this.authService.confirmEmail(token);
+      res.redirect(callbackURL);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;

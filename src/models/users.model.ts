@@ -3,6 +3,8 @@ export interface IUser extends Document {
   _id: string;
   email: string;
   password: string;
+  verificationToken?: string;
+  verifiedAt?: string;
 }
 
 const userSchema: Schema = new Schema({
@@ -14,6 +16,13 @@ const userSchema: Schema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  verificationToken: {
+    type: String,
+    unique: true,
+  },
+  verifiedAt: {
+    type: Date,
   },
 });
 
