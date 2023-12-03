@@ -13,7 +13,7 @@ class QuestionsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, authMiddleware, this.questionsController.getAllQuestions);
+    this.router.get(`${this.path}`, this.questionsController.getAllQuestions);
     this.router.post(`${this.path}`, authMiddleware, this.questionsController.createQuestion);
     this.router.post(`${this.path}/:id/answer`, authMiddleware, this.questionsController.answerQuestion);
     this.router.post(`${this.path}/:id/like`, authMiddleware, this.questionsController.likeQuestion);

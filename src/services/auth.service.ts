@@ -34,7 +34,7 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: IUser }> {
+  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: IUser; tokenData: TokenData }> {
     if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
     const findUser: IUser = await this.users.findOne({ email: userData.email });
@@ -46,7 +46,7 @@ class AuthService {
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
 
-    return { cookie, findUser };
+    return { cookie, findUser, tokenData };
   }
 
   private generateVerificationToken(): string {
@@ -71,7 +71,7 @@ class AuthService {
   }
 
   private createConfirmEmailLink(verificationToken: string, callback = '/'): string {
-    return `${APP_URL}/confirm-email?token=${verificationToken}&callbackURL=${callback}`;
+    return `${APP_URL}/auth/confirm-email?token=${verificationToken}&callbackURL=${callback}`;
   }
 
   public async confirmEmail(verificationToken: string): Promise<void> {

@@ -15,7 +15,7 @@ class QuestionService {
   public users = userModel;
 
   public async findAllQuestion(): Promise<Question[]> {
-    const questions: Question[] = await this.questions.find();
+    const questions: Question[] = await this.questions.find({}).populate('answers');
     return questions;
   }
 
@@ -31,7 +31,10 @@ class QuestionService {
     const question = await this.questions.findById(answerData.questionId);
     if (!question) throw new HttpException(404, 'Question not found');
     const newAnswer = await this.answers.create(answerData);
-    return newAnswer.save();
+    question.answers.push(newAnswer._id);
+    const answer = newAnswer.save();
+    question.save();
+    return answer;
   }
 
   public async like(likeData: LikeQuestionDto): Promise<IFavorite> {
